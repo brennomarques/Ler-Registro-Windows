@@ -1,0 +1,91 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Registry, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    function ProgramaInstalado(Programa: string): String;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+function TForm1.ProgramaInstalado(Programa: string): String;
+Var
+  List: TStringList;
+  Registry: TRegistry;
+  i: Integer;
+  DisplayName: String;
+begin
+  Registry := TRegistry.Create;
+  List := TStringList.Create;
+  try
+    with Registry do
+    begin
+      RootKey := HKEY_LOCAL_MACHINE;
+
+      if OpenKey('Software\Microsoft\Windows\CurrentVersion\Uninstall', False) Then
+      Begin
+        GetKeyNames(List);
+        CloseKey;
+      End;
+
+      for i := 0 to List.Count - 1 do
+      begin
+        RootKey := HKEY_LOCAL_MACHINE;
+        OpenKey('Software\Microsoft\Windows\CurrentVersion\Uninstall\' + List[i], False);
+        DisplayName := ReadString('DisplayName');
+        CloseKey;
+
+        if pos(AnsiUpperCase(Programa), AnsiUpperCase(DisplayName)) > 0 then
+        begin
+          Result := DisplayName;
+          exit;
+        end;
+      End;
+    end;
+  Finally
+    Registry.Free;
+    List.Free;
+  end;
+end;
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  Registro: TRegistry;
+  Usuario: String;
+begin
+  Registro:=TRegistry.Create;//instacia do objeto para acessar o registro
+  Registro.RootKey:=HKEY_LOCAL_MACHINE;//Abre a chave rais para leitura / gravação de valores
+  Registro.OpenKey('SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{64A3A4F4-B792-11D6-A78A-00B0D0180171}',false);//abre uma chave  de registro
+  Usuario:=Registro.ReadString('DisplayName');//Ler o valor (value) Logon User Name String para variavel Usuario.
+  ShowMessage('Usuário: ", " '+Usuario+' "');
+  Registro.Free;//Libera objeto do registro.
+
+
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+   if ProgramaInstalado(Edit1.Text) <> EmptyStr then
+    ShowMessage('Programa instalado: ' + sLineBreak + ProgramaInstalado(Edit1.Text))
+  else
+    ShowMessage('Programa não instalado');
+end;
+
+end.

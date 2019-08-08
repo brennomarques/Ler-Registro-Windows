@@ -1,0 +1,51 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 407
+  ClientWidth = 755
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object BitBtn1: TBitBtn
+    Left = 8
+    Top = 8
+    Width = 233
+    Height = 41
+    Caption = 'Verificado registro 1'
+    TabOrder = 0
+    OnClick = BitBtn1Click
+  end
+  object ListView1: TListView
+    Left = 8
+    Top = 55
+    Width = 729
+    Height = 344
+    Columns = <>
+    TabOrder = 1
+  end
+  object BitBtnverifica2: TBitBtn
+    Left = 247
+    Top = 8
+    Width = 233
+    Height = 41
+    Caption = 'Verificar registro 2'
+    TabOrder = 2
+    OnClick = BitBtnverifica2Click
+  end
+  object BitBtn3: TBitBtn
+    Left = 486
+    Top = 8
+    Width = 203
+    Height = 41
+    Caption = 'teste'
+    TabOrder = 3
+    OnClick = BitBtn3Click
+  end
+end
